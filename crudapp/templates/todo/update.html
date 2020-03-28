@@ -1,0 +1,12 @@
+{% extends 'todo/base.html' %}
+
+{% block content %}
+{% if object.user.username == view.request.user.username %}
+    <form action="" method="post">{% csrf_token %}
+        {{ form.text }}
+        <button type="submit" class="submit">変更</button>
+    </form>
+{% else %}
+    <p>アクセス権がありません</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'todo/base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p>Hi {{ user.username }}</p>
+<a href="{% url 'crudapp:create' %}">追加</a>
+  {% if object_list %}
+<ul>
+    {% for item in object_list %}
+      {% if item.user.username == view.request.user.username %}
+        <li>
+          {{ item.text }}
+          <a href="{% url 'crudapp:update' item.id %}">編集</a>
+          <a href="{% url 'crudapp:delete' item.id %}">削除</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+</ul>
+  {% else %}
+<p>"追加"をクリックし、Todoを追加しましょう</p>
+{% endif %}
+<p><a href="{% url 'users:logout' %}">Log out</a></p>
+{% else %}
+<p><a href="{% url 'users:login' %}">Login</a></p>
+<p><a href="{% url 'users:signup' %}">Sign Up</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'todo/base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<form method="post">
+  {% csrf_token %}
+  {{ form.text }}
+  {{ form.user }}
+
+  <button type="submit" class="submit">作成</button>
+</form>
+{% else %}
+<p>アクセス権がありません</p>
+{% endif %}
+{% endblock %}
