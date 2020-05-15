@@ -4,17 +4,18 @@
 {% if user.is_authenticated %}
 <p>Hi {{ user.username }}</p>
 <a href="{% url 'crudapp:create' %}">追加</a>
-  {% if object_list %}
+  {% if items %}
 <ul>
-    {% for item in object_list %}
-      {% if item.user.username == view.request.user.username %}
+  {% if user.id == view.request.user.id %}
+    {% for item in items %}
         <li>
           {{ item.text }}
           <a href="{% url 'crudapp:update' item.id %}">編集</a>
           <a href="{% url 'crudapp:delete' item.id %}">削除</a>
+          {{ item.isdone }}
         </li>
-      {% endif %}
-    {% endfor %}
+        {% endfor %}
+        {% endif %}
 </ul>
   {% else %}
 <p>"追加"をクリックし、Todoを追加しましょう</p>

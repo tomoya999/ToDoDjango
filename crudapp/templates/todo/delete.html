@@ -1,7 +1,7 @@
 {% extends 'todo/base.html' %}
 
 {% block content %}
-{% if object.user.username == view.request.user.username %}
+{% if user.id == view.request.user.id %}
     <p>Todo "{{ object.text }}"を削除してよろしいですか？</p>
     <form action="" method="post">{% csrf_token %}
         <button type="submit" class="submit delete">削除</button>

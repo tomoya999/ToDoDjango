@@ -4,7 +4,9 @@ app_name = 'crudapp'
 
 urlpatterns = [
 # list
-path('', views.IndexView.as_view(), name='index'),
+# path('', views.IndexView.as_view(), name='index'),
+path('', views.index, name='index'),
+
 # create
 path('create/', views.CreateView.as_view(), name='create'),
 # detail

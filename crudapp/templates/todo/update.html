@@ -1,7 +1,7 @@
 {% extends 'todo/base.html' %}
 
 {% block content %}
-{% if object.user.username == view.request.user.username %}
+{% if user.id == view.request.user.id %}
     <form action="" method="post">{% csrf_token %}
         {{ form.text }}
         <button type="submit" class="submit">変更</button>
