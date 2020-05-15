@@ -2,10 +2,15 @@
 *.log
 *.pot
 *.pyc
-.vscode/settings.json
+.vscode/
+.devcontainer/
 __pycache__/
 local_settings.py
 db.sqlite3
 media
 pipfile
 pipfile.lock
+.gitignore
+docker-compose.yml
+Dockerfile
+requirements.txt
