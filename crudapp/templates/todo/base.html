@@ -1,11 +1,164 @@
-<head>
-  <title>Todo</title>
-</head>
+<html>
 
-<body>
-  <header>
-    <h1><a href="{% url 'crudapp:index' %}">Todo</a></h1>
-    {% block content %}
-    {% endblock %}
-  </header>
-</body>
+  <head>
+    <!-- Vuetify -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <title>Todo</title>
+  </head>
+  
+  <body>
+  <div id="app">
+  <v-app id="inspire">
+    <v-app id="inspire">
+      <v-navigation-drawer
+        v-model="drawer"
+        app
+      >
+        <v-list dense>
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon>mdi-contact-mail</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Contact</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          {% if user.is_authenticated %}
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon>mdi-home</v-icon>
+            </v-list-item-action>
+            <v-list-item-content><a href="{% url 'users:logout' %}">Log out</a></p>
+              <v-list-item-title></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          {% endif %}
+        </v-list>
+      </v-navigation-drawer>
+  
+      <v-app-bar
+        app
+        color="indigo"
+        dark
+      >
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-toolbar-title>Todo</v-toolbar-title>
+      </v-app-bar>
+  
+      
+      
+      {% block content %}
+      {% endblock %}
+      <v-footer
+        color="indigo"
+        app
+      >
+        <span class="white--text">&copy; 2019</span>
+      </v-footer>
+    </v-app>
+  </v-app>
+</div>
+    <!-- Vue.js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script> -->
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Vuetify -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  </body>
+  <script>
+  new Vue({
+    el: "#app",
+    vuetify: new Vuetify(),
+    delimiters: ['[[', ']]'],
+    data: {
+      newItem: '',
+      items: [],
+      drawer: null,
+    },
+    
+    mounted(){
+      axios
+      .get('http://127.0.0.1:8001/api/list')
+      .then(response => (this.items = response.data))
+      .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+      .finally(function () { 
+        // always executed
+      });
+    },
+    methods : {
+    addItem: function(){
+      axios.defaults.xsrfCookieName = 'csrftoken'
+      axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+      axios.post('http://127.0.0.1:8001/api/create',{
+            text: this.newItem
+           })
+          // .then(response => this.items.push(response.data))
+          .then(response => alert(JSON.response.data))
+
+          .catch(response => console.log(response))
+          .finally()
+    },
+    deleteItems: function(items) {
+        ids = [];
+        ids = this.remaining(items);
+        axios.defaults.xsrfCookieName = 'csrftoken'
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+        axios.post('http://127.0.0.1:8001/api/delete/', ids)
+        .then(response => this.reload())
+        .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+      // always executed
+      });
+      // }
+    },
+    reload: function(){
+      axios
+      .get('http://127.0.0.1:8001/api/list')
+      .then(response => (this.items = response.data))
+      .catch(function (error) {
+      // handle error
+      console.log(error);
+      })
+      .finally(response => this.newItem = '');
+    },
+    changeFlag: function(item) {
+          axios.defaults.xsrfCookieName = 'csrftoken'
+          axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+          axios
+          .put('http://127.0.0.1:8001/api/update/'+item.id, {'pk': item.id})
+          .then(response => (item.is_done = response.data["is_done"]))
+          .catch(response => console.log(response))
+          .finally()
+    },
+    remaining: function(items) {
+      let ids = [];
+      k = 0;
+
+      for( let i = 0; i < items.length; i++ ){
+          if( items[i]['is_done'] == true ){
+            ids[k] = items[i]['id'];
+            k ++;
+          }
+      }
+    return ids;
+    }
+  },
+})
+</script>
+<style>
+.form-control{
+  border: 1px dotted #333333;
+  border-radius: 4px;
+}
+</style>
+  {% block js %}{% endblock %}
+</html>

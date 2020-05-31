@@ -1,7 +1,81 @@
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-  <p><a href="{% url 'users:signup' %}">Sign Up</a></p>
-</form>
+{% extends 'todo/base.html' %}
+{% block content %}
+      <v-content>
+        <v-container
+          class="fill-height"
+          fluid
+        >
+          <v-row
+            align="center"
+            justify="center"
+          >
+            <v-col
+              cols="12"
+              sm="10"
+              md="8"
+            >
+              <v-card class="elevation-12">
+                <v-toolbar
+                  color="primary"
+                  dark
+                  flat
+                >
+                  <v-toolbar-title>ログイン</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        :href="source"
+                        icon
+                        large
+                        target="_blank"
+                        v-on="on"
+                      >
+                      </v-btn>
+                    </template>
+                    <span>Source</span>
+                  </v-tooltip>
+                </v-toolbar>
+                <v-card-text align="center">
+                  <form method="post">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                    <v-alert
+                      text
+                      type="error"
+                    >
+                    {{ form.non_field_errors }}
+                    </v-alert>
+                    {% endif %}
+
+                    {% for field in form %}
+                    {% if field.errors %}
+                    <v-alert
+                      text
+                      type="error"
+                    >
+                    {{ field.errors }}
+                    {% endif %}
+                    </v-alert>
+                    {{ field }}
+                    {% endfor %}
+                    <p><a href="{% url 'users:signup' %}">会員登録</a></p>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" type="submit">ログイン</v-btn>
+                </v-card-actions>
+                  </form>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-content>
+
+
+<style>
+.form-control{
+  border: 1px dotted #333333;
+} 
+</style>
+{% endblock %}

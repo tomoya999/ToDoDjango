@@ -1,7 +1,65 @@
-<h2>Sign up</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">登録</button>
-  <p><a href="{% url 'users:signup' %}">Sign Up</a></p>
-</form>
+{% extends 'todo/base.html' %}
+{% block content %}
+<v-content>
+  <v-container
+    class="fill-height"
+    fluid
+    >
+    <v-row
+      align="center"
+      justify="center"
+      >
+            <v-col
+              cols="12"
+              sm="10"
+              md="8"
+            >
+              <v-card class="elevation-12">
+                <v-toolbar
+                  color="primary"
+                  dark
+                  flat
+                >
+                  <v-toolbar-title>会員登録</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        :href="source"
+                        icon
+                        large
+                        target="_blank"
+                        v-on="on"
+                      >
+                      </v-btn>
+                    </template>
+                  </v-tooltip>
+                </v-toolbar>
+                <v-card-text align="center">
+                  <form method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                    {% if field.errors %}
+                    <v-alert
+                      text
+                      type="error"
+                    >
+                    {{ field.errors }}
+                    </v-alert>
+                    {% endif %}
+                    {{ field }}
+                    {% endfor %}
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" type="submit">登録する</v-btn>
+                    </v-card-actions>
+                    <p><a href="{% url 'users:login' %}">ログインはこちらから</a></p>
+                  </form>
+                  </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+  </v-container>
+</v-content>
+{% endblock %}
